@@ -1,0 +1,25 @@
+name: test-custom-offline-store
+
+on: [push, pull_request]
+jobs:
+  test-provider:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ 3.7, 3.8, 3.9 ]
+        os: [ ubuntu-latest, macOS-latest]
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest test_custom_offline_store.py
