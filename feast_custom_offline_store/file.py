@@ -41,7 +41,7 @@ class CustomFileRetrievalJob(RetrievalJob):
 
     def to_arrow(self):
         # Only execute the evaluation function to build the final historical retrieval dataframe at the last moment.
-        print("Getting a pandas DataFrame from a File is easy!")
+        print("Getting an arrow Table from a File is easy!")
         df = self.evaluation_function()
         return pyarrow.Table.from_pandas(df)
 
