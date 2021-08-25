@@ -4,7 +4,7 @@
 ### Overview
 
 This repository demonstrates how developers can create their own custom `offline store`s for Feast.
-Custom offline stores allow users to use any underlying data store to as the source of truth for features which get materialized into the online feature store. Features can be retrieved from the offline store for model training. 
+Custom offline stores allow users to use any underlying data store as their offline feature store. Features can be retrieved from the offline store for model training, and can be materialized into the online feature store for use during model inference. 
 
 
 ### Why create a custom offline store?
