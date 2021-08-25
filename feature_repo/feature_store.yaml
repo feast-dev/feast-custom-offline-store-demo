@@ -1,0 +1,8 @@
+project: repo
+registry: registry.db
+provider: local
+online_store:
+    type: sqlite
+    path: online_store.db
+offline_store:
+    type: feast_custom_offline_store.file.CustomFileOfflineStore

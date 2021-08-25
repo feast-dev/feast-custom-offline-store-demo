@@ -1,0 +1,2 @@
+feast_custom_offline_store/
+pytest==6.2.4
