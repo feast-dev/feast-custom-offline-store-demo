@@ -9,11 +9,11 @@ Custom offline stores allow users to use any underlying data store to as the sou
 
 ### Why create a custom offline store?
 
-Feast uses an offline store as the source of truth for features. These features can be retrieved from the offline store for model training. Typically, scalable Data Warehouses are used for this purpose.
+Feast uses an offline store as the source of truth for features. These features can be retrieved from the offline store for model training. Typically, scalable data warehouses are used for this purpose.
  
 Feast also materializes features from offline stores to an online store for low-latency lookup at model inference time. 
 
-Feast comes with some offline stores built in, e.g, Parquet file, Redshift and Bigquery. However, users can develop their own offline stores by creating a class that implements the contract in the [OfflineStore class](https://github.com/feast-dev/feast/blob/master/sdk/python/feast/infra/offline_stores/offline_store.py#L41).
+Feast comes with some offline stores built in, e.g, Parquet file, Redshift and Bigquery. However, users can develop their own offline stores by creating a class that implements the contract in the [OfflineStore class](https://github.com/feast-dev/feast/blob/5e61a6f17c3b52f20b449214a4bb56bafa5cfcbc/sdk/python/feast/infra/offline_stores/offline_store.py#L41).
 
 ### What is included in this repository?
 

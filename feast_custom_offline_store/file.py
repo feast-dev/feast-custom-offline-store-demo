@@ -1,10 +1,11 @@
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Callable
 
 import pandas as pd
+import pyarrow
 from feast.data_source import DataSource
 from feast.feature_view import FeatureView
-from feast.infra.offline_stores.file import FileOfflineStore
+from feast.infra.offline_stores.file import FileOfflineStore, FileRetrievalJob
 from feast.infra.offline_stores.offline_store import RetrievalJob
 from feast.registry import Registry
 from feast.repo_config import RepoConfig, FeastConfigBaseModel
@@ -16,6 +17,33 @@ class CustomFileOfflineStoreConfig(FeastConfigBaseModel):
 
     type: Literal["feast_custom_offline_store.file.CustomFileOfflineStore"] \
         = "feast_custom_offline_store.file.CustomFileOfflineStore"
+
+
+class FileOfflineStoreConfig(FeastConfigBaseModel):
+    """ Offline store config for local (file-based) store """
+
+    type: Literal["file"] = "file"
+    """ Offline store type selector"""
+
+
+class CustomFileRetrievalJob(RetrievalJob):
+    def __init__(self, evaluation_function: Callable):
+        """Initialize a lazy historical retrieval job"""
+
+        # The evaluation function executes a stored procedure to compute a historical retrieval.
+        self.evaluation_function = evaluation_function
+
+    def to_df(self):
+        # Only execute the evaluation function to build the final historical retrieval dataframe at the last moment.
+        print("Getting a pandas DataFrame from a File is easy!")
+        df = self.evaluation_function()
+        return df
+
+    def to_arrow(self):
+        # Only execute the evaluation function to build the final historical retrieval dataframe at the last moment.
+        print("Getting a pandas DataFrame from a File is easy!")
+        df = self.evaluation_function()
+        return pyarrow.Table.from_pandas(df)
 
 
 class CustomFileOfflineStore(FileOfflineStore):
@@ -30,13 +58,15 @@ class CustomFileOfflineStore(FileOfflineStore):
                                 registry: Registry, project: str,
                                 full_feature_names: bool = False) -> RetrievalJob:
         print("Getting historical features from my offline store")
-        return super().get_historical_features(config,
+        job = super().get_historical_features(config,
                                                feature_views,
                                                feature_refs,
                                                entity_df,
                                                registry,
                                                project,
                                                full_feature_names)
+        assert isinstance(job, FileRetrievalJob)
+        return CustomFileRetrievalJob(job.evaluation_function)
 
     def pull_latest_from_table_or_query(self,
                                         config: RepoConfig,
@@ -48,7 +78,7 @@ class CustomFileOfflineStore(FileOfflineStore):
                                         start_date: datetime,
                                         end_date: datetime) -> RetrievalJob:
         print("Pulling latest features from my offline store")
-        return super().pull_latest_from_table_or_query(config,
+        job = super().pull_latest_from_table_or_query(config,
                                                        data_source,
                                                        join_key_columns,
                                                        feature_name_columns,
@@ -56,3 +86,5 @@ class CustomFileOfflineStore(FileOfflineStore):
                                                        created_timestamp_column,
                                                        start_date,
                                                        end_date)
+        assert isinstance(job, FileRetrievalJob)
+        return CustomFileRetrievalJob(job.evaluation_function)

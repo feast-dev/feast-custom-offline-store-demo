@@ -2,6 +2,7 @@
 *.pyc
 **__pycache__
 .direnv
+.envrc
 feature_repo/online_store.db
 feature_repo/registry.db
 output
