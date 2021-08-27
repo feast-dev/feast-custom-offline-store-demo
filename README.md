@@ -17,7 +17,7 @@ Feast comes with some offline stores built in, e.g, Parquet file, Redshift and B
 
 ### What is included in this repository?
 
-* [feast_custom_offline_store/](feast_custom_offline_store): An example of a custom online store, `CustomFileOfflineStore`, which implements OfflineStore. This example online store overrides the File offline store that is provided by Feast.
+* [feast_custom_offline_store/](feast_custom_offline_store): An example of a custom offline store, `CustomFileOfflineStore`, which implements OfflineStore. This example offline store overrides the File offline store that is provided by Feast.
 * [feature_repo/](feature_repo): A simple feature repository that is used to test the custom offline store. The repository has been configured to use the custom offline store as part of it's `feature_store.yaml`
 * [test_custom_offline_store.py](test_custom_offline_store.py): A test case that uses `CustomFileOfflineStore` through the `feature_repo/`
 
