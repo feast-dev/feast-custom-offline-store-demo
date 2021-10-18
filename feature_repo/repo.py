@@ -1,14 +1,20 @@
 from datetime import timedelta
 
-from feast import Entity, Feature, FeatureView, FileSource, ValueType
+from feast import Entity, Feature, FeatureView, ValueType
 
-driver_hourly_stats = FileSource(
+from feast_custom_offline_store.file import CustomFileDataSource
+
+driver_hourly_stats = CustomFileDataSource(
     path="feature_repo/data/driver_stats.parquet",
     event_timestamp_column="event_timestamp",
     created_timestamp_column="created",
 )
 
-driver = Entity(name="driver_id", value_type=ValueType.INT64, description="driver id",)
+driver = Entity(
+    name="driver_id",
+    value_type=ValueType.INT64,
+    description="driver id",
+)
 
 driver_hourly_stats_view = FeatureView(
     name="driver_hourly_stats",

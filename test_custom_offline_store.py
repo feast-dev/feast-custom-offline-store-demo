@@ -18,14 +18,17 @@ def test_end_to_end():
         fs.materialize_incremental(end_date=datetime.now())
 
         entity_df = pd.DataFrame(
-            {"driver_id": [1001],
-             "event_timestamp": [datetime.now()]}
+            {"driver_id": [1001], "event_timestamp": [datetime.now()]}
         )
 
         # Read features from online store
-        feature_vector = fs.get_historical_features(
-            features=["driver_hourly_stats:conv_rate"], entity_df=entity_df
-        ).to_df().to_dict()
+        feature_vector = (
+            fs.get_historical_features(
+                features=["driver_hourly_stats:conv_rate"], entity_df=entity_df
+            )
+            .to_df()
+            .to_dict()
+        )
         conv_rate = feature_vector["conv_rate"][0]
         assert conv_rate > 0
     finally:
@@ -34,9 +37,7 @@ def test_end_to_end():
 
 
 def test_cli():
-    os.system(
-        "PYTHONPATH=$PYTHONPATH:/$(pwd) feast -c feature_repo apply"
-    )
+    os.system("PYTHONPATH=$PYTHONPATH:/$(pwd) feast -c feature_repo apply")
     try:
         os.system(
             "PYTHONPATH=$PYTHONPATH:/$(pwd) feast -c feature_repo materialize-incremental 2021-08-19T22:29:28 > output"
@@ -49,6 +50,4 @@ def test_cli():
                 'Failed to successfully use provider from CLI. See "output" for more details.'
             )
     finally:
-        os.system(
-            "PYTHONPATH=$PYTHONPATH:/$(pwd) feast -c feature_repo teardown"
-        )
+        os.system("PYTHONPATH=$PYTHONPATH:/$(pwd) feast -c feature_repo teardown")
