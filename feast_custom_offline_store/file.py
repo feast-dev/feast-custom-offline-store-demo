@@ -41,10 +41,11 @@ class CustomFileDataSource(FileSource):
         date_partition_column: Optional[str] = "",
     ):
         super(CustomFileDataSource, self).__init__(
-            event_timestamp_column,
-            created_timestamp_column,
-            field_mapping,
-            date_partition_column,
+            event_timestamp_column=event_timestamp_column,
+            created_timestamp_column=created_timestamp_column,
+            field_mapping=field_mapping,
+            date_partition_column=date_partition_column,
+            path=path,
         )
         self._path = path
 
@@ -81,6 +82,7 @@ class CustomFileDataSource(FileSource):
         config_json = json.dumps({"path": self.path})
         data_source_proto = DataSourceProto(
             type=DataSourceProto.CUSTOM_SOURCE,
+            field_mapping=self.field_mapping,
             custom_options=DataSourceProto.CustomSourceOptions(
                 configuration=bytes(config_json, encoding="utf8")
             ),
