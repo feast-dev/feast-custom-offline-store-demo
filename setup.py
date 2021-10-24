@@ -10,6 +10,6 @@ setup(
     long_description_content_type="text/markdown",
     python_requires=REQUIRES_PYTHON,
     packages=find_packages(include=["feast_custom_offline_store"]),
-    install_requires=["feast==0.12.1"],
+    install_requires=["feast==0.14.0"],
     license="Apache",
 )
