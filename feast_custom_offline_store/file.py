@@ -103,13 +103,21 @@ class CustomFileRetrievalJob(RetrievalJob):
         # The evaluation function executes a stored procedure to compute a historical retrieval.
         self.evaluation_function = evaluation_function
 
-    def to_df(self):
+    @property
+    def full_feature_names(self):
+        return False
+
+    @property
+    def on_demand_feature_views(self):
+        return None
+
+    def _to_df_internal(self):
         # Only execute the evaluation function to build the final historical retrieval dataframe at the last moment.
         print("Getting a pandas DataFrame from a File is easy!")
         df = self.evaluation_function()
         return df
 
-    def to_arrow(self):
+    def _to_arrow_internal(self):
         # Only execute the evaluation function to build the final historical retrieval dataframe at the last moment.
         print("Getting an arrow Table from a File is easy!")
         df = self.evaluation_function()
